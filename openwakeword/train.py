@@ -582,7 +582,14 @@ if __name__ == '__main__':
         required=True
     )
     parser.add_argument(
-        "--generate_clips",
+        "--generate_positive_clips",
+        help="Execute the synthetic data generation process",
+        action="store_true",
+        default="False",
+        required=False
+    )
+    parser.add_argument(
+        "--generate_negative_clips",
         help="Execute the synthetic data generation process",
         action="store_true",
         default="False",
@@ -638,7 +645,7 @@ if __name__ == '__main__':
     for background_path, duplication_rate in zip(config["background_paths"], config["background_paths_duplication_rate"]):
         background_paths.extend([i.path for i in os.scandir(background_path)]*duplication_rate)
 
-    if args.generate_clips is True:
+    if args.generate_positive_clips is True:
         # Generate positive clips for training
         logging.info("#"*50 + "\nGenerating positive clips for training\n" + "#"*50)
         if not os.path.exists(positive_train_output_dir):
@@ -670,6 +677,7 @@ if __name__ == '__main__':
         else:
             logging.warning(f"Skipping generation of positive clips testing, as ~{config['n_samples_val']} already exist")
 
+    if args.generate_negative_clips is True:
         # Generate adversarial negative clips for training
         logging.info("#"*50 + "\nGenerating negative clips for training\n" + "#"*50)
         if not os.path.exists(negative_train_output_dir):
