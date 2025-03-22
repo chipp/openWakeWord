@@ -666,6 +666,8 @@ def augment_clips(
             torch_audiomentations.Gain(max_gain_in_db=0, p=augmentation_probabilities["Gain"]),
         ])
 
+    clip_paths = [i for i in clip_paths if not i.split("/")[-1].startswith("._")]
+
     # Iterate through all clips and augment them
     for i in range(0, len(clip_paths), batch_size):
         batch = clip_paths[i:i+batch_size]
